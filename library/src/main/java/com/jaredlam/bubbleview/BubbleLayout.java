@@ -285,28 +285,36 @@ public class BubbleLayout extends ViewGroup implements BubbleView.MoveListener {
 
         @Override
         public void handleMessage(Message msg) {
-            BubbleLayout layout = mBubbleLayout.get();
-            int count = layout.getChildCount();
-            for (int i = 0; i < count && layout.mBubbleInfos.size() > 0; i++) {
+            try {
 
-                BubbleInfo bubbleInfo = layout.mBubbleInfos.get(i);
 
-                List<BubbleInfo> overlapList = layout.hasOverlap(bubbleInfo);
+                BubbleLayout layout = mBubbleLayout.get();
+                if (layout != null) {
+                    int count = layout.getChildCount();
+                    for (int i = 0; i < count && layout.mBubbleInfos.size() > 0; i++) {
 
-                Point overlapPoint = layout.ifOverlapBounds(bubbleInfo);
-                if (overlapPoint != null) {
-                    layout.reverseIfOverlapBounds(bubbleInfo);
-                } else if (overlapList.size() > 0) {
-                    layout.dealWithOverlap();
+                        BubbleInfo bubbleInfo = layout.mBubbleInfos.get(i);
+
+                        List<BubbleInfo> overlapList = layout.hasOverlap(bubbleInfo);
+
+                        Point overlapPoint = layout.ifOverlapBounds(bubbleInfo);
+                        if (overlapPoint != null) {
+                            layout.reverseIfOverlapBounds(bubbleInfo);
+                        } else if (overlapList.size() > 0) {
+                            layout.dealWithOverlap();
+                        }
+
+                        layout.moveBubble(bubbleInfo);
+                    }
+                    layout.startAnimate();
                 }
 
-                layout.moveBubble(bubbleInfo);
+            }catch (Exception e){
+                e.printStackTrace();
             }
-            layout.startAnimate();
         }
     }
 
-    ;
 
     private void moveBubble(BubbleInfo info) {
         View child = getChildAt(info.getIndex());
