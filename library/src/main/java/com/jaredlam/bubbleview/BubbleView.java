@@ -93,6 +93,9 @@ public class BubbleView extends TextView {
         int color = getResources().getColor(colorRes);
         mPaint.setColor(color);
     }
+    public void setCircleColor(String color){
+        mPaint.setColor(Color.parseColor(color));
+    }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
